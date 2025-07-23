@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>True Gamers - Rental Launcher</title>
+    <script src='https://code.jquery.com/jquery-1.7.1.js' crossorigin='anonymous'></script>
+    <script src="<!--ROOT-DIR-->/js/script.js"></script>
+    <link href="<!--ROOT-DIR-->/css/style.css" rel="stylesheet" type="text/css">
+    <!--GAME-LIST-ARR-->
+    <!--NEW-GAME-LIST-ARR-->
+    <script>
+        function viewGameList() {
+    var gameListBox = document.getElementById('game_list_items');
+    gameListBox.innerHTML = "";
+
+    for (var index in gameList) {
+        var RentalId = gameList[index].RentalId;
+        var Title = gameList[index].Title;
+
+        var localPath = "<!--ROOT-DIR-->/../launcher_game_images/" + RentalId + "/header.jpg";
+        var cdnUrl = "https://cdn.jsdelivr.net/gh/tgi-bot/rental-images@main/launcher_game_images/" + RentalId + "/header.jpg";
+
+        var newDiv = document.createElement("div");
+        newDiv.className = "game_item arr_games";
+        newDiv.setAttribute("onclick", "window.external.OnClickGameBox('" + RentalId + "')");
+
+        var img = document.createElement("img");
+        img.className = "game_icon";
+        img.alt = Title;
+        img.src = localPath;
+        img.onload = function () {
+            if (this.naturalWidth === 0) {
+                this.src = this.getAttribute("data-cdn");
+            }
+        };
+        img.onerror = function () {
+            this.src = this.getAttribute("data-cdn");
+        };
+        img.setAttribute("data-cdn", cdnUrl);
+
+        var titleDiv = document.createElement("div");
+        titleDiv.className = "game_title";
+        titleDiv.textContent = Title;
+
+        newDiv.appendChild(img);
+        newDiv.appendChild(titleDiv);
+        gameListBox.appendChild(newDiv);
+    }
+}
+    </script>
+    <style>
+        .invisible { display: none !important; }
+        body {
+            background: url('<!--ROOT-DIR-->/images/bg_arena.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<div class="page_wrapper">
+    <div class="page">
+        <div class="main-wrapper">
+            <div class="main">
+                <div class="content_panel">
+                    <div id="game_list_box">
+                        <script type="application/javascript">
+                            $(document).on('keyup', '#search-game', searchGameFilter);
+                        </script>
+
+                        <div class="tg-logo-container">
+                            <img src="<!--ROOT-DIR-->/images/logo.png" alt="True Gamers Logo" class="tg-logo">
+                        </div>
+
+                        <div class="content_title" style="margin-top: 20px;">
+                            <span></span>
+                        </div>
+
+                        <div class="tg-logo-caption">
+                            LAUNCH. PLAY. CONQUER.
+                        </div>
+
+                        <div class="content_title" style="margin-top: 20px;">
+                        </div>
+
+<div class="search_game_list_box">
+                            <div class="search__group">
+                                <input id="search-game" onkeyup="searchGameFilter()" class="search__input" type="text" placeholder="Search games...">
+                            </div>
+                        </div>
+
+ <div class="content_title" style="margin-top: 20px;">
+                            <span></span>
+                        </div>
+
+<!-- Start New Games -->
+<div class="content_title" id="new-games-title-block">
+  <div id="new-games-title">New Games</div>
+</div>
+<div id="new_game_list_items"></div>
+<!-- End New Games -->
+
+                        <script>
+                       function viewNewGameList() {
+    var newGameListBox = document.getElementById('new_game_list_items');
+    newGameListBox.innerHTML = "";
+
+    for (var index in newGameList) {
+        var RentalId = newGameList[index].RentalId;
+        var Title = newGameList[index].Title;
+
+        var localPath = "<!--ROOT-DIR-->/../launcher_game_images/" + RentalId + "/header.jpg";
+        var cdnUrl = "https://cdn.jsdelivr.net/gh/tgi-bot/rental-images@main/launcher_game_images/" + RentalId + "/header.jpg";
+
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("class", "game_item arr_games");
+        newDiv.setAttribute("onclick", "window.external.OnClickGameBox('" + RentalId + "');");
+
+        var img = document.createElement("img");
+        img.className = "game_icon";
+        img.src = localPath;
+        img.alt = Title;
+
+        // fallback на CDN
+        img.onerror = (function (cdn) {
+            return function () {
+                this.onerror = null;
+                this.src = cdn;
+            };
+        })(cdnUrl);
+
+        var titleDiv = document.createElement("div");
+        titleDiv.className = "game_title";
+        titleDiv.innerText = Title;
+
+        newDiv.appendChild(img);
+        newDiv.appendChild(titleDiv);
+        newGameListBox.appendChild(newDiv);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (typeof newGameList !== "undefined") {
+        viewNewGameList();
+    }
+});
+                        </script>
+
+                       <div class="content_title" id="content_title">
+  <div id="game-list-title">Game List</div>
+</div>
+
+<div class="game-list-wrapper">
+  <div id="game_list_items" class="games_list"></div>
+</div>
+               
+<script>
+function searchGameFilter() {
+    var $phrase = $('#search-game');
+    var regPhrase = new RegExp($phrase.val(), 'i');
+    var $arr_games = $('#game_list_items .arr_games');
+
+    $arr_games.each(function () {
+        var game_name = $(this).find('.game_title').html();
+        var flag = regPhrase.test(game_name);
+        if (flag)
+            $(this).removeClass('invisible');
+        else
+            $(this).addClass('invisible');
+    });
+}
+
+function waitForGameList() {
+    if (typeof gameList !== "undefined" && gameList.length > 0) {
+        viewGameList();
+        $('#search-game').on('input', searchGameFilter);
+    } else {
+        setTimeout(waitForGameList, 100);
+    }
+}
+document.addEventListener("DOMContentLoaded", waitForGameList);
+</script>
+</body>
+</html>
