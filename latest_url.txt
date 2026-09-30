@@ -1,2 +1,2 @@
-2.0.9.23
-https://download.rentalgames.ru/download/RentalGames/2000923/InstallRentalGames.exe
+2.0.9.25
+https://download.rentalgames.ru/download/RentalGames/2000925/InstallRentalGames.exe
